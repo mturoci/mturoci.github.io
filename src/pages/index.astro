@@ -1,24 +1,15 @@
 ---
-import { getCollection } from "astro:content";
-
 // Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Component Imports
-import CallToAction from "../components/CallToAction.astro";
 import Grid from "../components/Grid.astro";
 import Hero from "../components/Hero.astro";
 import Icon from "../components/Icon.astro";
 import Pill from "../components/Pill.astro";
-import PortfolioPreview from "../components/PortfolioPreview.astro";
 
 // Page section components
 import Skills from "../components/Skills.astro";
-
-// Content Fetching: List four most recent work projects
-const projects = (await getCollection("work"))
-  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
-  .slice(0, 4);
 
 const publicSpeaking = [
   {
@@ -43,12 +34,65 @@ const publicSpeaking = [
   },
 ];
 
+const workExperience = [
+  {
+    company: "H2O.ai",
+    logo: "/assets/h2o-logo.svg",
+    role: "Senior Software Engineer",
+    date: "May 2020 - Present",
+    descriptions: [
+      "Started H2O Wave project alongside the Chief of Technology.",
+      "Built most of the UI widgets.",
+      "Setup the whole CI/CD pipeline via Github Actions.",
+      "Grew into a project lead.",
+      "Dev advocate for the project - wrote blog posts, gave talks, etc.",
+      "Author of developer tooling around the framework - IDE extensions, Getting started apps etc.",
+    ],
+    tech: [
+      "TypeScript",
+      "React",
+      "Jest",
+      "Vite",
+      "Python",
+      "Go",
+      "Docker",
+      "Github Actions",
+      "AWS",
+      "Playwright",
+    ],
+  },
+  {
+    company: "Wirecard",
+    logo: "/assets/wirecard.jpg",
+    role: "Frontend Developer",
+    date: "Apr 2019 - Apr 2020",
+    descriptions: [
+      "Implementing new UI features for Wirecard global merchant registration form.",
+      "Implementing new UI features for internal applications.",
+      "Webpack build optimizations.",
+      "Code reviews, dev experience, interviewing candidates.",
+    ],
+    tech: ["TypeScript", "VueJS", "Jest", "Webpack"],
+  },
+  {
+    company: "IBM",
+    logo: "/assets/ibm.jpg",
+    role: "Application Developer",
+    date: "Sep 2017 - Apr 2019",
+    descriptions: [
+      "Feature development for legacy Java-based desktop application.",
+      "Communication in German language.",
+    ],
+    tech: ["Java"],
+  },
+];
+
 // Full Astro Component Syntax:
 // https://docs.astro.build/core-concepts/astro-components/
 ---
 
 <BaseLayout>
-  <div class="stack gap-20 lg:gap-48">
+  <div class="stack gap-10 lg:gap-20">
     <div class="wrapper stack gap-8 lg:gap-20">
       <header class="hero">
         <Hero
@@ -73,60 +117,63 @@ const publicSpeaking = [
 
       <Skills />
     </div>
+    <section class="section with-background bg-variant">
+      <header class="section-header stack gap-2 lg:gap-4">
+        <h3>Work experience</h3>
+      </header>
+      <div class="gallery work-exp-wrapper">
+        {
+          workExperience.map((exp) => (
+            <article class="work-exp">
+              <div class="img-wrapper">
+                <img
+                  src={exp.logo}
+                  alt={exp.company}
+                  width="100"
+                  height="100"
+                />
+              </div>
+              <div>
+                <h4 class="title">{exp.role}</h4>
+                <p>{exp.company}</p>
+                <i>{exp.date}</i>
+                <ul class="desc">
+                  {exp.descriptions.map((desc) => (
+                    <li>{desc}</li>
+                  ))}
+                </ul>
+                <h5>Tech: </h5>
+                <ul class="tech">
+                  {exp.tech.map((tech) => (
+                    <li>{tech}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+    <section class="section with-background bg-variant">
+      <header class="section-header stack gap-2 lg:gap-4">
+        <h3>Public speaking</h3>
+      </header>
 
-    <main class="wrapper stack gap-20 lg:gap-48">
-      <section class="section with-background with-cta">
-        <header class="section-header stack gap-2 lg:gap-4">
-          <h3>Selected Work</h3>
-          <p>
-            Take a look below at some of my featured work for clients from the
-            past few years.
-          </p>
-        </header>
-
-        <div class="gallery">
-          <Grid variant="offset">
-            {
-              projects.map((project) => (
-                <li>
-                  <PortfolioPreview project={project} />
-                </li>
-              ))
-            }
-          </Grid>
-        </div>
-
-        <div class="cta">
-          <CallToAction href="/work/">
-            View All
-            <Icon icon="arrow-right" size="1.2em" />
-          </CallToAction>
-        </div>
-      </section>
-
-      <section class="section with-background bg-variant">
-        <header class="section-header stack gap-2 lg:gap-4">
-          <h3>Public speaking</h3>
-        </header>
-
-        <div class="gallery">
-          <Grid variant="small">
-            {
-              publicSpeaking.map((event) => (
-                <li class="mention-card">
-                  <a href={event.link} target="_blank">
-                    <img src={event.img} alt={event.title} width="100" />
-                    <p>{event.title}</p>
-                  </a>
-                </li>
-              ))
-            }
-          </Grid>
-        </div>
-      </section>
-    </main>
-
-    <!-- <ContactCTA /> -->
+      <div class="gallery">
+        <Grid variant="small">
+          {
+            publicSpeaking.map((event) => (
+              <li class="mention-card">
+                <a href={event.link} target="_blank">
+                  <img src={event.img} alt={event.title} width="100" />
+                  <p>{event.title}</p>
+                </a>
+              </li>
+            ))
+          }
+        </Grid>
+      </div>
+    </section>
   </div>
 </BaseLayout>
 
@@ -148,6 +195,61 @@ const publicSpeaking = [
     object-position: top;
     border-radius: 1.5rem;
     box-shadow: var(--shadow-md);
+  }
+
+  .work-exp-wrapper {
+    margin: 0 auto;
+  }
+  .work-exp {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin: 1rem;
+    margin-top: 2rem;
+  }
+  .work-exp:first-child {
+    margin-top: 0;
+  }
+
+  .work-exp .img-wrapper {
+    max-width: 150px;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .work-exp > div {
+    text-align: left;
+    flex-basis: 500px;
+    flex-grow: 1;
+  }
+
+  .work-exp h4 {
+    font-size: 1.25rem;
+  }
+  .work-exp h5 {
+    display: inline;
+    font-size: 1rem;
+  }
+  .work-exp .desc {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+  }
+  .work-exp .tech {
+    list-style: none;
+    display: inline-block;
+    padding: 0;
+    margin-left: 1rem;
+  }
+  .tech li {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    color: var(--gray-300);
+    background: var(--gradient-subtle);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-800);
+    border-radius: 1.5rem;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
   }
 
   @media (min-width: 50em) {
