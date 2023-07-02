@@ -2,12 +2,7 @@
 import Icon, { Props as IconProps } from './Icon.astro';
 import ThemeToggle from './ThemeToggle.astro';
 
-const textLinks: { label: string; href: string }[] = [
-	{ label: 'Home', href: '/' },
-	{ label: 'Work', href: '/work/' },
-	{ label: 'About', href: '/about/' },
-];
-
+const textLinks: { label: string; href: string }[] = [ ];
 const iconLinks: { label: string; href: string; icon: IconProps['icon'] }[] = [
 	{ label: 'Twitter', href: 'https://twitter.com/unusual_code', icon: 'twitter-logo' },
 	{ label: 'GitHub', href: 'https://github.com/mturoci', icon: 'github-logo' },
@@ -32,7 +27,7 @@ const iconLinks: { label: string; href: string; icon: IconProps['icon'] }[] = [
 		</menu-button>
 	</div>
 	<div id="menu-content">
-		<ul class="nav-items">
+		<ul class:list={['nav-items', { 'nav-items-empty': !textLinks.length}]}>
 			{
 				textLinks.map(({ label, href }) => (
 					<li>
@@ -182,6 +177,10 @@ const iconLinks: { label: string; href: string; icon: IconProps['icon'] }[] = [
 		background-color: var(--gray-999);
 		border-bottom: 1px solid var(--gray-800);
 	}
+
+  .nav-items-empty {
+    visibility: hidden;
+  }
 
 	.link {
 		display: inline-block;
