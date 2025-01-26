@@ -40,8 +40,10 @@ const workExperience = [
     logo: "assets/h2o-logo.svg",
     role: "Senior Software Engineer",
     date: "Mar 2023 - Present",
+    projectName: "Enterprise H2OGPTe",
+    projectURL: "https://h2o.ai/platform/enterprise-h2ogpte/",
     descriptions: [
-      "UI lead for the latest flagship product - Enterprise H2OGPTe - https://h2o.ai/platform/enterprise-h2ogpte/",
+      "UI lead for the latest flagship product - Enterprise H2OGPTe",
       "Responsible for frontend architecture, security, performance, scalability and code quality.",
       "Integrations with other H2O products, namely Eval Studio.",
     ],
@@ -63,6 +65,8 @@ const workExperience = [
     logo: "assets/h2o-logo.svg",
     role: "Software Engineer",
     date: "May 2020 - Feb 2023",
+    projectName: "H2O Wave",
+    projectURL: "https://wave.h2o.ai/",
     descriptions: [
       "Started H2O Wave project alongside Chief of Technology.",
       "Grew into a project lead, responsible for technical and product vision wrt usability, security, scalability and performance.",
@@ -162,6 +166,12 @@ const workExperience = [
                 <h4 class="title">{exp.role}</h4>
                 <p>{exp.company}</p>
                 <i>{exp.date}</i>
+                {exp.projectURL && (
+                  <p class="mt-3">
+                  Project:
+                    <a href={exp.projectURL} target="_blank">{exp.projectName}</a>
+                  </p>
+                )}
                 <ul class="desc">
                   {exp.descriptions.map((desc) => (
                     <li>{desc}</li>
